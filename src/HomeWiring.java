@@ -85,17 +85,25 @@ public class HomeWiring {
 
             if(componentType.equals(CIRCUIT))
             {
-                components.Component temp = new components.Circuit(name, numberPart);
-                Components.add(temp);
+                if(name != "null")
+                {
+                    components.Component temp = new components.Circuit(name, Components.get(name),numberPart);
+                    Components.add(temp);
+                }
+                else
+                {
+                    components.Component temp = new components.Circuit(name, null, numberPart);
+                    Components.add(temp);
+                }
             }
             else if (componentType.equals(OUTLET))
             {
-                components.Component temp = new components.Outlet(name, numberPart);
+                components.Component temp = new components.Outlet(name, Components.get(name), numberPart);
                 Components.add(temp);
             }
             else if (componentType.equals(APPLIANCE))
             {
-                components.Component temp = new components.Appliance(name, numberPart);
+                components.Component temp = new components.Appliance(name, Components.get(name), numberPart);
                 Components.add(temp);
             }
             else
@@ -106,4 +114,5 @@ public class HomeWiring {
 
         }
     }
+
 }

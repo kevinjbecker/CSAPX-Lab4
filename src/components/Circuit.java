@@ -8,11 +8,12 @@ public class Circuit extends Component
     /**
      * Creates a circuit object to add to the item.
      * @param name
+     * @param parent
      * @param maxCurrent
      */
-    public Circuit(String name, int maxCurrent)
+    public Circuit(String name, Component parent, int maxCurrent)
     {
-        super(name, Type.values()[1]);
+        super(name, parent, Type.values()[1]);
         this.maxCurrent = maxCurrent;
     }
 
@@ -22,7 +23,12 @@ public class Circuit extends Component
     }
     public boolean add(Component component)
     {
-        return true;
+        if(component.getType() != Type.APPLIANCE)
+        {
+
+            return true;
+        }
+        return false;
     }
     public boolean updateCurrent(int current){return true;}
 

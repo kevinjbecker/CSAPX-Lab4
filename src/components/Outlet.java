@@ -5,9 +5,9 @@ public class Outlet extends Component
 
     protected int outlets;
 
-    public Outlet(String name, int outlets)
+    public Outlet(String name, Component parent, int outlets)
     {
-        super(name, Type.values()[0]);
+        super(name, parent, Type.values()[0]);
         this.outlets = outlets;
     }
 

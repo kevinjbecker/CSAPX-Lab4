@@ -4,15 +4,14 @@ public class Appliance extends Component{
 
     protected int requiredCurrent;
 
-    public Appliance(String name, int requiredCurrent)
+    public Appliance(String name, Component parent, int requiredCurrent)
     {
-        super(name, Type.values()[2]);
+        super(name, parent, Type.values()[2]);
         this.requiredCurrent = requiredCurrent;
     }
 
     public boolean remove()
     {
-
         return true;
     }
     public boolean add(Component component)
