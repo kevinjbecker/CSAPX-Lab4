@@ -12,11 +12,12 @@ public class Appliance extends Component{
 
     public boolean remove()
     {
+
         return true;
     }
     public boolean add(Component component)
     {
-        return true;
+        return false;
     }
 
     public void turnOn()

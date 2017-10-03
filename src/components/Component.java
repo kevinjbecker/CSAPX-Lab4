@@ -13,6 +13,11 @@ public abstract class Component
     private String name;
     private Component.Type type;
 
+    /**
+     *
+     * @param name
+     * @param type
+     */
     public Component(String name, Component.Type type)
     {
         this.name = name;
@@ -44,12 +49,12 @@ public abstract class Component
 
     public String getName()
     {
-        return name;
+        return this.name;
     }
 
     public Component.Type getType()
     {
-        return type;
+        return this.type;
     }
 
     @Override

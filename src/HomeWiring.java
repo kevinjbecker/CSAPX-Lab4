@@ -42,6 +42,11 @@ public class HomeWiring {
     }
 
 
+    /**
+     *
+     * @param filePath
+     * @return
+     */
     private static String [] readWiringDiagramFile(String filePath)
     {
         try

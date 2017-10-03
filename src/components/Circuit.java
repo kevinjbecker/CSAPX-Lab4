@@ -5,6 +5,11 @@ public class Circuit extends Component
 
     protected int maxCurrent;
 
+    /**
+     * Creates a circuit object to add to the item.
+     * @param name
+     * @param maxCurrent
+     */
     public Circuit(String name, int maxCurrent)
     {
         super(name, Type.values()[1]);
@@ -13,7 +18,7 @@ public class Circuit extends Component
 
     public boolean remove()
     {
-        return true;
+        return false;
     }
     public boolean add(Component component)
     {
