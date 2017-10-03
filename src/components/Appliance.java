@@ -12,7 +12,13 @@ public class Appliance extends Component{
 
     public boolean remove()
     {
-        return true;
+        if(parent != null)
+        {
+            this.turnOff();
+            parent.getChildren().remove(this);
+            return true;
+        }
+        return false;
     }
     public boolean add(Component component)
     {

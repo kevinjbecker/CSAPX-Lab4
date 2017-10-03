@@ -21,15 +21,17 @@ public class Circuit extends Component
     {
         return false;
     }
+
     public boolean add(Component component)
     {
         if(component.getType() != Type.APPLIANCE)
         {
-
+            parent.getChildren().add(component);
             return true;
         }
         return false;
     }
+
     public boolean updateCurrent(int current){return true;}
 
     public void turnOn()

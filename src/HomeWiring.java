@@ -79,36 +79,44 @@ public class HomeWiring {
         for(String cmd : cmds)
         {
             String [] splitCmd = cmd.split(" ");
-            String name = splitCmd[2];
             String componentType = splitCmd[1];
-            int numberPart = Integer.parseInt(splitCmd[4]);
+            String name = splitCmd[2];
+            String parentName = splitCmd[3];
+            int currentPart = Integer.parseInt(splitCmd[4]);
 
             if(componentType.equals(CIRCUIT))
             {
                 if(name != "null")
                 {
-                    components.Component temp = new components.Circuit(name, Components.get(name),numberPart);
+                    // add component-type new-component parent-component #
+                    components.Component parent = Components.get(parentName);
+                    components.Component temp = new components.Circuit(name, parent, currentPart);
                     Components.add(temp);
+                    boolean added = parent.add(temp);
                 }
                 else
                 {
-                    components.Component temp = new components.Circuit(name, null, numberPart);
+                    components.Component temp = new components.Circuit(name, null, currentPart);
                     Components.add(temp);
                 }
             }
             else if (componentType.equals(OUTLET))
             {
-                components.Component temp = new components.Outlet(name, Components.get(name), numberPart);
+                components.Component parent = Components.get(parentName);
+                components.Component temp = new components.Outlet(name, parent, currentPart);
                 Components.add(temp);
+                boolean added = parent.add(temp);
             }
             else if (componentType.equals(APPLIANCE))
             {
-                components.Component temp = new components.Appliance(name, Components.get(name), numberPart);
+                components.Component parent = Components.get(parentName);
+                components.Component temp = new components.Appliance(name, parent, currentPart);
                 Components.add(temp);
+                boolean added = parent.add(temp);
             }
             else
             {
-                System.out.print("Non-correct component type specified on a non-commented line. Skipping.");
+                System.out.print("Incorrect component type specified on a non-commented line. Skipping.");
             }
             // Because it is the initial setup, we can assume we need to add all of them to the Components database
 

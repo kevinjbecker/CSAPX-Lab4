@@ -13,11 +13,17 @@ public class Outlet extends Component
 
     public boolean remove()
     {
-        return true;
+        return false;
     }
     public boolean add(Component component)
     {
-        return true;
+        if(component.getType() == Type.APPLIANCE)
+        {
+            this.getChildren().add(component);
+            component.turnOn();
+            return true;
+        }
+        return false;
     }
     public boolean updateCurrent(int current){return true;}
 

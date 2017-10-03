@@ -12,13 +12,14 @@ public abstract class Component
         OUTLET
     }
 
-    private String name;
-    private Component.Type type;
-    private Component parent;
-    private List<Component> children = new ArrayList<Component>();
-    private Component highestParent;
-    private int maxCurrent;
-    private int currentUsed;
+    protected String name;
+    protected Component.Type type;
+    protected Component parent;
+    protected List<Component> children = new ArrayList<Component>();
+    protected Component highestParent;
+    protected boolean turnedOn;
+    protected int maxCurrent;
+    protected int currentUsed;
 
     public Component(String name, Component parent, Component.Type type)
     {
