@@ -12,15 +12,17 @@ public abstract class Component
 
     private String name;
     private Component.Type type;
+    private Component parent;
 
     /**
      *
      * @param name
      * @param type
      */
-    public Component(String name, Component.Type type)
+    public Component(String name, Component parent, Component.Type type)
     {
         this.name = name;
+        this.parent = parent;
         this.type = type;
     }
 

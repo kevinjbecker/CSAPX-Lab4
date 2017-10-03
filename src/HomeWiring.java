@@ -1,58 +1,30 @@
 import java.util.Scanner;
 import java.io.File;
 
+
 public class HomeWiring {
 
-    public static void main(String[] args)
-    {
-        if(args.length < 1)
-        {
-            System.out.println("Usage: $ java HomeWiring diagram");
-        }
-        else
-        {
+    private HomeWiring diagram;
+    public static final String ADD = "add";
+    public static final String APPLIANCE = "appliance";
+    public static final String CIRCUIT = "circuit";
+    public static final String COMMENT = "#";
+    public static final String DISPLAY = "d";
+    public static final String MAIN = "main";
+    public static final String OFF = "-";
+    public static final String ON = "+";
+    public static final String OUTLET = "outlet";
+    public static final String PLUG = "p";
+    public static final String PROMPT = ">";
+    public static final String QUIT = "q";
+    public static final String UNPLUG = "u";
 
-            String [] cmds = readWiringDiagramFile(args[0]);
-
-            if(cmds == null)
-            {
-                System.out.println("Your file was empty. Please try again.");
-            }
-            else
-            {
-                createWiringDiagram(cmds);
-
-                // This is used to break the program when it is time to turn it off.
-                boolean continueRunning = true;
-
-                // Keeps the program alive until it is quit.
-                while (continueRunning) {
-                    continueRunning = false;
-                }
-            }
-        }
-    }
-
-    private static void createWiringDiagram(String[] cmds)
-    {
-        for(String cmd : cmds)
-        {
-            System.out.println("YAY");
-        }
-    }
-
-
-    /**
-     *
-     * @param filePath
-     * @return
-     */
-    private static String [] readWiringDiagramFile(String filePath)
+    public HomeWiring(String fileName)
     {
         try
         {
             // Creates a scanner object that reads from the file
-            Scanner sc = new Scanner(new File(filePath));
+            Scanner sc = new Scanner(new File(fileName));
 
             // Creates the String array of commands
             String [] cmds = {};
@@ -63,19 +35,75 @@ public class HomeWiring {
                 String line_in_file = sc.nextLine();
 
                 // If a line is not empty and isn't a comment, then we can accept it as
-                if (!line_in_file.isEmpty() && !line_in_file.substring(0, 1).equals("#")) {
+                if (!line_in_file.isEmpty() && !line_in_file.substring(0, 1).equals(COMMENT))
+                {
                     cmds[i] = line_in_file;
                 }
             }
-            return cmds;
+            createWiringDiagram(cmds);
+            run();
         }
         catch(java.io.FileNotFoundException e)
         {
             System.out.println("The file you tried to read from cannot be found. Please try again.");
         }
-
-        // This should absolutely never run, but it is there to make IntelliJ happy.
-        return null;
     }
 
+
+    public static void main(String[] args)
+    {
+        if(args.length < 1)
+        {
+            System.out.println("Usage: $ java HomeWiring diagram");
+        }
+        else
+        {
+            HomeWiring diagram = new HomeWiring(args[0]);
+        }
+    }
+
+    private void run()
+    {
+        boolean continueRunning = true;
+        Scanner in = new Scanner(System.in);
+        while(continueRunning)
+        {
+            System.out.print(PROMPT);
+            String next = in.nextLine();
+        }
+    }
+
+    private void createWiringDiagram(String[] cmds)
+    {
+        // add component-type new-component parent-component #
+        for(String cmd : cmds)
+        {
+            String [] splitCmd = cmd.split(" ");
+            String name = splitCmd[2];
+            String componentType = splitCmd[1];
+            int numberPart = Integer.parseInt(splitCmd[4]);
+
+            if(componentType.equals(CIRCUIT))
+            {
+                components.Component temp = new components.Circuit(name, numberPart);
+                Components.add(temp);
+            }
+            else if (componentType.equals(OUTLET))
+            {
+                components.Component temp = new components.Outlet(name, numberPart);
+                Components.add(temp);
+            }
+            else if (componentType.equals(APPLIANCE))
+            {
+                components.Component temp = new components.Appliance(name, numberPart);
+                Components.add(temp);
+            }
+            else
+            {
+                System.out.print("Non-correct component type specified on a non-commented line. Skipping.");
+            }
+            // Because it is the initial setup, we can assume we need to add all of them to the Components database
+
+        }
+    }
 }
