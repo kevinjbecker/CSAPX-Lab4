@@ -7,8 +7,7 @@ package components;
 
 public class Outlet extends Component
 {
-
-    protected int outlets;
+    private int outlets;
 
     /**
      * Creates a Outlet object.
@@ -35,8 +34,8 @@ public class Outlet extends Component
     {
         if(component.type == Type.APPLIANCE)
         {
+            //Adds to the children component
             children.add(component);
-            //component.turnOn();
             return true;
         }
         return false;
@@ -53,7 +52,7 @@ public class Outlet extends Component
     }
 
     /**
-     * Overrides the toString method to give critical information about the Outlets.
+     * Overrides the toString method to give critical information about the Outlet.
      *
      * @return a String for the Outlet Component.
      */

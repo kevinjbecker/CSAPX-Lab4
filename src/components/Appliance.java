@@ -8,13 +8,15 @@ package components;
 public class Appliance extends Component
 {
     /**
+     * Creates an Appliance object.
      *
-     * @param name
-     * @param parent
-     * @param requiredCurrent
+     * @param name The name of the Appliance.
+     * @param parent The parent Component of the Appliance.
+     * @param requiredCurrent The required current of the Appliance.
      */
     public Appliance(String name, Component parent, int requiredCurrent)
     {
+        // Runs the superclass' constructor using the name, the parent, the type and maxCurrent of 0
         super(name, parent, Type.APPLIANCE, requiredCurrent);
     }
 
@@ -22,8 +24,11 @@ public class Appliance extends Component
      *
      */
     @Override
-    public void turnOn(){
+    public void turnOn()
+    {
+        // Makes the current being used equal to the current the Appliance draws
         currentBeingUsed = maxCurrent;
+        // Calls the superclass' turnOn() method
         super.turnOn();
     }
 
@@ -32,7 +37,9 @@ public class Appliance extends Component
      */
     @Override
     public void turnOff(){
+        // Sets the current being used equal to 0 since the Appliance is now off
         currentBeingUsed = 0;
+        // Calls the superclass' turnOff() method
         super.turnOff();
     }
 
@@ -54,20 +61,26 @@ public class Appliance extends Component
      */
     public boolean remove()
     {
+        // If the parent is null (in other words, it isn't removed from the diagram)
         if(parent != null)
         {
+            // Turn the Appliance off
             turnOff();
+            // Remove itself from its parents' child ArrayList
             parent.children.remove(this);
+            // Set its parent to null
             parent = null;
             return true;
         }
         return false;
     }
 
-    @Override
     /**
+     * Overrides the toString method to give critical information about the Appliance.
      *
+     * @return a String for the Appliance Component.
      */
+    @Override
     public String toString()
     {
         return "Appliance(name=" + name + ", current=" + currentBeingUsed +"/"+ maxCurrent +", on=" + turnedOn +")";

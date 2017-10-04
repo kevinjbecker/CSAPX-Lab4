@@ -22,25 +22,26 @@ public abstract class Component
         OUTLET
     }
 
-    protected String name;
-    protected Component.Type type;
-    protected Component parent;
-    protected List<Component> children = new ArrayList<Component>();
-    protected Component highestParent;
-    protected boolean turnedOn = false;
-    protected int currentBeingUsed = 0;
-    protected int maxCurrent;
+    // Without and modifier these variables are package private; the desired design.
+    String name;
+    Component.Type type;
+    Component parent;
+    List<Component> children = new ArrayList<>();
+    Component highestParent;
+    boolean turnedOn = false;
+    int currentBeingUsed = 0;
+    int maxCurrent;
 
 
     /**
-     * Constructs a new Component object.
+     * Constructs a new Component object. No modifier is provided since the only classes that use this constructor are package based.
      *
      * @param name The name of the Component.
      * @param parent The parent Component of this new Component.
      * @param type The type of Component being used (utilizes Component.Types enum).
      * @param maxCurrent The maximum current allowed by the Component.
      */
-    public Component(String name, Component parent, Component.Type type, int maxCurrent)
+    Component(String name, Component parent, Component.Type type, int maxCurrent)
     {
         this.name = name;
         this.parent = parent;
@@ -60,6 +61,12 @@ public abstract class Component
      * @return true or false; true if the Component was successfully added, false otherwise.
      */
     public abstract boolean add(Component component);
+
+    /**
+     * An abstract class for the remove method, used to remove a Component from its parent.
+     *
+     * @return true or false; true if the Component was successfully removed, false otherwise.
+     */
     public abstract boolean remove();
 
     /**
