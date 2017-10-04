@@ -13,10 +13,23 @@ public class Circuit extends Component
      */
     public Circuit(String name, Component parent, int maxCurrent)
     {
-        super(name, parent, Type.values()[1]);
+        super(name, parent, Type.values()[1], 0);
         this.maxCurrent = maxCurrent;
     }
 
+    public void updateCurrent() {
+        if(children.size() > 0)
+        {
+            int currentTotal = 0;
+            for (Component child : children) {
+                child.updateCurrent();
+                currentTotal += child.currentUsed;
+            }
+            currentUsed = currentTotal;
+        }
+    }
+
+    @Override
     public boolean remove()
     {
         return false;
@@ -24,24 +37,17 @@ public class Circuit extends Component
 
     public boolean add(Component component)
     {
-        if(component.getType() != Type.APPLIANCE)
+        if(component.type != Type.APPLIANCE)
         {
-            parent.getChildren().add(component);
+            parent.children.add(component);
             return true;
         }
         return false;
     }
 
-    public boolean updateCurrent(int current){return true;}
-
-    public void turnOn()
+    private void overloadCircuit()
     {
-
-    }
-
-    @Override
-    public String toString()
-    {
-        return "";
+        System.out.println(this + " is breaking!");
+        turnOff();
     }
 }

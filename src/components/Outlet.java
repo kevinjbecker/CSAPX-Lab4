@@ -7,34 +7,42 @@ public class Outlet extends Component
 
     public Outlet(String name, Component parent, int outlets)
     {
-        super(name, parent, Type.values()[0]);
+        super(name, parent, Type.values()[0], 0);
         this.outlets = outlets;
+    }
+
+    @Override
+    public boolean add(Component component)
+    {
+        if(component.type == Type.APPLIANCE)
+        {
+            children.add(component);
+            component.turnOn();
+            return true;
+        }
+        return false;
     }
 
     public boolean remove()
     {
         return false;
     }
-    public boolean add(Component component)
+
+    public void updateCurrent()
     {
-        if(component.getType() == Type.APPLIANCE)
+        int currentTotal = 0;
+
+        for(Component child : children)
         {
-            this.getChildren().add(component);
-            component.turnOn();
-            return true;
+            currentTotal += child.currentUsed;
         }
-        return false;
-    }
-    public boolean updateCurrent(int current){return true;}
 
-    public void turnOn()
-    {
-
+        this.currentUsed = currentTotal;
     }
 
     @Override
-    public String toString()
-    {
-        return "";
+    public String toString(){
+        return "Outlet(name=" + name + ", current=" +
+                current +", plugs=" + children.size() + '/' +  outlets + ", turnedOn=" + turnedOn +")";
     }
 }

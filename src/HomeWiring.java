@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.File;
 
 
@@ -27,17 +29,17 @@ public class HomeWiring {
             Scanner sc = new Scanner(new File(fileName));
 
             // Creates the String array of commands
-            String [] cmds = {};
+            List<String>cmds = new ArrayList();
 
             // Makes an array of the commands that need to be run
-            for(int i = 0; sc.hasNextLine(); i++)
+            while(sc.hasNextLine())
             {
                 String line_in_file = sc.nextLine();
 
                 // If a line is not empty and isn't a comment, then we can accept it as
                 if (!line_in_file.isEmpty() && !line_in_file.substring(0, 1).equals(COMMENT))
                 {
-                    cmds[i] = line_in_file;
+                    cmds.add(line_in_file);
                 }
             }
             createWiringDiagram(cmds);
@@ -59,6 +61,7 @@ public class HomeWiring {
         else
         {
             HomeWiring diagram = new HomeWiring(args[0]);
+            diagram.run();
         }
     }
 
@@ -70,10 +73,16 @@ public class HomeWiring {
         {
             System.out.print(PROMPT);
             String next = in.nextLine();
+            if(next.substring(0,1).equals("q"))
+            {
+                System.out.println("System will now quit.");
+                continueRunning = false;
+            }
+            //implement all of the commands
         }
     }
 
-    private void createWiringDiagram(String[] cmds)
+    private void createWiringDiagram(List<String> cmds)
     {
         // add component-type new-component parent-component #
         for(String cmd : cmds)
@@ -82,7 +91,7 @@ public class HomeWiring {
             String componentType = splitCmd[1];
             String name = splitCmd[2];
             String parentName = splitCmd[3];
-            int currentPart = Integer.parseInt(splitCmd[4]);
+            int value = Integer.parseInt(splitCmd[4]);
 
             if(componentType.equals(CIRCUIT))
             {
@@ -90,36 +99,33 @@ public class HomeWiring {
                 {
                     // add component-type new-component parent-component #
                     components.Component parent = Components.get(parentName);
-                    components.Component temp = new components.Circuit(name, parent, currentPart);
+                    components.Component temp = new components.Circuit(name, parent, value);
                     Components.add(temp);
-                    boolean added = parent.add(temp);
                 }
                 else
                 {
-                    components.Component temp = new components.Circuit(name, null, currentPart);
+                    components.Component temp = new components.Circuit(name, null, value);
                     Components.add(temp);
                 }
             }
             else if (componentType.equals(OUTLET))
             {
                 components.Component parent = Components.get(parentName);
-                components.Component temp = new components.Outlet(name, parent, currentPart);
+                components.Component temp = new components.Outlet(name, parent, value);
                 Components.add(temp);
-                boolean added = parent.add(temp);
             }
             else if (componentType.equals(APPLIANCE))
             {
                 components.Component parent = Components.get(parentName);
-                components.Component temp = new components.Appliance(name, parent, currentPart);
+                components.Component temp = new components.Appliance(name, parent, value);
                 Components.add(temp);
-                boolean added = parent.add(temp);
             }
             else
             {
                 System.out.print("Incorrect component type specified on a non-commented line. Skipping.");
             }
-            // Because it is the initial setup, we can assume we need to add all of them to the Components database
 
+            // Because it is the initial setup, we can assume we need to add all of them to the Components database
         }
     }
 
