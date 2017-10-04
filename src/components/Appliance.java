@@ -2,6 +2,7 @@ package components;
 
 /**
  * This class is used for Appliance Components. It can only receive power.
+ *
  * @author Kevin Becker
  */
 

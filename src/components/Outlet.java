@@ -2,6 +2,7 @@ package components;
 
 /**
  * This class is used for the Outlet Components. It can only distribute power to Appliances.
+ *
  * @author Kevin Becker
  */
 
