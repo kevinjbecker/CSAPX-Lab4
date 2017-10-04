@@ -102,7 +102,11 @@ public class HomeWiring {
                 }
                 else if(cmds[0].equals(OFF))
                 {
-                    //power off
+                    if(Components.has(cmds[1]))
+                    {
+                        Component stopPowerCascade = Components.get(cmds[1]);
+                        stopPowerCascade.turnOff();
+                    }
                 }
                 else if(cmds[0].equals(PLUG))
                 {
@@ -142,7 +146,6 @@ public class HomeWiring {
                     System.out.println("Unknown command. Please try again.");
                 }
             }
-            //implement all of the commands
         }
     }
 
@@ -184,5 +187,4 @@ public class HomeWiring {
             // Because it is the initial setup, we can assume we need to add all of them to the Components database
         }
     }
-
 }
