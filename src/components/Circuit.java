@@ -31,7 +31,7 @@ public class Circuit extends Component
         // Makes sure the current being used doesn't exceed the max current
         if (currentBeingUsed > maxCurrent & turnedOn)
         {
-            overloadCircuit();
+            breakCircuit();
         }
     }
 
@@ -67,7 +67,7 @@ public class Circuit extends Component
     /**
      * If the circuit overloads, this method goes down the cascade turning off each of the subComponents.
      */
-    private void overloadCircuit()
+    private void breakCircuit()
     {
         // Prints that the Circuit is breaking
         System.out.println(this + " is breaking.");

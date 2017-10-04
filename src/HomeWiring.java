@@ -27,7 +27,12 @@ public class HomeWiring
     private static final String QUIT = "q";
     private static final String UNPLUG = "u";
 
-    public HomeWiring(String fileName)
+    /**
+     * Private constructor of the HomeWiring object. I made this private because it doesn't need to be publicly available.
+     *
+     * @param fileName the name of the file containing the wiring diagram.
+     */
+    private HomeWiring(String fileName)
     {
         try
         {
@@ -35,7 +40,7 @@ public class HomeWiring
             Scanner sc = new Scanner(new File(fileName));
 
             // Creates the String array of commands
-            List<String>cmds = new ArrayList();
+            ArrayList<String>cmds = new ArrayList<>();
 
             // Makes an array of the commands that need to be run
             while(sc.hasNextLine())
@@ -61,7 +66,11 @@ public class HomeWiring
         }
     }
 
-
+    /**
+     * The main runner method of HomeWiring.java
+     *
+     * @param args the arguments array used for getting the fileName when constructing the HomeWiring from file.
+     */
     public static void main(String[] args)
     {
         if(args.length < 1)
@@ -79,6 +88,9 @@ public class HomeWiring
         }
     }
 
+    /**
+     * The run method which allows the user to interact with the diagram.
+     */
     private void run()
     {
         // This boolean keep the program running until the QUIT command is passed
@@ -176,6 +188,11 @@ public class HomeWiring
         }
     }
 
+    /**
+     * Creates the wiring diagram in the specified manner.
+     *
+     * @param cmds an array of Strings which add assorted types of Components
+     */
     private void createWiringDiagram(List<String> cmds)
     {
         // Loops through all of the command lines
