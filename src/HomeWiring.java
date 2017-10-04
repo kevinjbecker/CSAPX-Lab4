@@ -1,25 +1,31 @@
 import components.Component;
-
+import components.*;
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 
+/**
+ * This class is used to construct a HomeWiring diagram (read in from a file). It then runs the program so
+ * different items can be tested by the user. Uses the database structure provided by Professor Sean Strout @ RIT CS.
+ *
+ * @author Kevin Becker
+ */
 
-public class HomeWiring {
 
-    private HomeWiring diagram;
-    public static final String APPLIANCE = "appliance";
-    public static final String CIRCUIT = "circuit";
-    public static final String COMMENT = "#";
-    public static final String DISPLAY = "d";
-    public static final String OFF = "-";
-    public static final String ON = "+";
-    public static final String OUTLET = "outlet";
-    public static final String PLUG = "p";
-    public static final String PROMPT = ">";
-    public static final String QUIT = "q";
-    public static final String UNPLUG = "u";
+public class HomeWiring
+{
+    private static final String APPLIANCE = "appliance";
+    private static final String CIRCUIT = "circuit";
+    private static final String COMMENT = "#";
+    private static final String DISPLAY = "d";
+    private static final String OFF = "-";
+    private static final String ON = "+";
+    private static final String OUTLET = "outlet";
+    private static final String PLUG = "p";
+    private static final String PROMPT = "> ";
+    private static final String QUIT = "q";
+    private static final String UNPLUG = "u";
 
     public HomeWiring(String fileName)
     {
@@ -34,18 +40,23 @@ public class HomeWiring {
             // Makes an array of the commands that need to be run
             while(sc.hasNextLine())
             {
-                String line_in_file = sc.nextLine();
+                // Reads in a line of the file
+                String lineInFile = sc.nextLine();
 
                 // If a line is not empty and isn't a comment, then we can accept it as
-                if (!line_in_file.isEmpty() && !line_in_file.substring(0, 1).equals(COMMENT))
+                if (!lineInFile.isEmpty() && !lineInFile.substring(0, 1).equals(COMMENT))
                 {
-                    cmds.add(line_in_file);
+                    // Adds to the database each component
+                    cmds.add(lineInFile);
                 }
             }
+
+            // Takes the wiring diagram and puts it into memory as component objects
             createWiringDiagram(cmds);
         }
         catch(java.io.FileNotFoundException e)
         {
+            // If the file isn't found we can simply alert the user to this so it doesn't blow up
             System.out.println("The file you tried to read from cannot be found. Please try again.");
         }
     }
@@ -55,95 +66,111 @@ public class HomeWiring {
     {
         if(args.length < 1)
         {
+            // If the startup command was used wrong, alert the user and exit.
             System.out.println("Usage: $ java HomeWiring diagram");
         }
         else
         {
+            // Creates a HomeWiring object using the file specified as an argument
             HomeWiring diagram = new HomeWiring(args[0]);
+            
+            // Runs the program until the QUIT command is run
             diagram.run();
         }
     }
 
     private void run()
     {
+        // This boolean keep the program running until the QUIT command is passed
         boolean continueRunning = true;
-        Scanner in = new Scanner(System.in);
+        
+        // Creates a new Scanner for user input
+        Scanner userInput = new Scanner(System.in);
+        
         while(continueRunning)
         {
+            // Prints the prompt String (>)
             System.out.print(PROMPT);
-            String next = in.nextLine();
+            
+            // Gets the next command
+            String next = userInput.nextLine();
+            
+            // If it is the quit command, quit the program otherwise enter else loop and perform more conditionals
             if(next.toLowerCase().equals(QUIT))
             {
+                // This quits the program
                 System.out.println("System will now quit.");
-                break;
+                continueRunning = false;
             }
             else
             {
+                // Takes the input String and converts each it to an Array of tokens
                 String [] cmds = next.split(" ");
-                if(cmds[0].equals(DISPLAY))
+                // If the first token is the DISPLAY command display it.
+
+                Component component = null;
+
+                if(Components.has(cmds[1]))
                 {
-                    if(Components.has(cmds[1]))
-                    {
-                        components.Component toDisplay = Components.get(cmds[1]);
-                        toDisplay.display();
-                    }
-                    else
-                    {
-                        System.out.println("Unknown component: " + cmds[1]);
-                    }
-                }
-                else if(cmds[0].equals(ON))
-                {
-                    if (Components.has(cmds[1]))
-                    {
-                        Component startPowerCascade = Components.get(cmds[1]);
-                        startPowerCascade.turnOn();
-                    }
-                }
-                else if(cmds[0].equals(OFF))
-                {
-                    if(Components.has(cmds[1]))
-                    {
-                        Component stopPowerCascade = Components.get(cmds[1]);
-                        stopPowerCascade.turnOff();
-                    }
-                }
-                else if(cmds[0].equals(PLUG))
-                {
-                    try
-                    {
-                        //plug component
-                        if (Components.has(cmds[1]))
-                        {
-                            Component toPlug = Components.get(cmds[1]);
-                            Component newParent = Components.get(cmds[2]);
-                            boolean plugged = newParent.add(toPlug);
-                            System.out.println(cmds[1] + " plugged in: " + plugged);
-                        }
-                        else
-                        {
-                            System.out.println("Component does not exist. Cannot be plugged in.");
-                        }
-                    }
-                    catch (ArrayIndexOutOfBoundsException e)
-                    {
-                        System.out.println("Usage: >p component-name parent-component-name");
-                    }
-                }
-                else if(cmds[0].equals(UNPLUG))
-                {
-                    //unplug component
-                    //plug component
-                    if(Components.has(cmds[1]))
-                    {
-                        Component toUnPlug = Components.get(cmds[1]);
-                        boolean unplugged = toUnPlug.remove();
-                        System.out.println(cmds[1]+ " unplugged: " + unplugged);
-                    }
+                    // Gather the start component
+                    component = Components.get(cmds[1]);
                 }
                 else
                 {
-                    System.out.println("Unknown command. Please try again.");
+                    // Alert the user that the component doesn't exist
+                    System.out.println("Unknown component: " + cmds[1]);
+                }
+
+                if(component != null)
+                {
+                    switch (cmds[0].toLowerCase())
+                    {
+                        case DISPLAY:
+                            // Display the component and its cascade of children
+                            component.display();
+                            break;
+                        case ON:
+                            component.turnOn();
+                            break;
+                        case OFF:
+                            component.turnOff();
+                            break;
+                        case PLUG:
+                            // Try to run this block
+                            try
+                            {
+                                // If parent component actually exists
+                                if (Components.has(cmds[2]))
+                                {
+                                    // Get the parent item
+                                    Component parent = Components.get(cmds[2]);
+                                    // Attempt to plug component into parent
+                                    boolean plugged = parent.add(component);
+                                    // Alert the user on success or failure
+                                    System.out.println(cmds[1] + " plugged in: " + plugged);
+                                }
+                                else
+                                {
+                                    // Alert the user if disallowed attempt
+                                    System.out.println("Component does not exist. Cannot be plugged in.");
+                                }
+                            }
+                            catch (ArrayIndexOutOfBoundsException e)
+                            {
+                                // If there are not enough arguments then tell the user this (prevents blowing up)
+                                System.out.println("Usage: >p component-name parent-component-name");
+                            }
+                            break;
+                        case UNPLUG:
+                            // Attempt to remove the component
+                            boolean unplugged = component.remove();
+                            // Alert the user on success or failure
+                            System.out.println(cmds[1]+ " unplugged: " + unplugged);
+                            break;
+                        default:
+                            System.out.println("Unknown command.");
+                            break;
+                    }
                 }
             }
         }
@@ -151,40 +178,41 @@ public class HomeWiring {
 
     private void createWiringDiagram(List<String> cmds)
     {
-        // add component-type new-component parent-component #
+        // Loops through all of the command lines
         for(String cmd : cmds)
         {
+            // Splits each command into an array of tokens
             String [] splitCmd = cmd.split(" ");
+            // Gets the component type
             String componentType = splitCmd[1];
+            // Gets the component name
             String name = splitCmd[2];
+            // Gets the component's parent name
             String parentName = splitCmd[3];
+            // Gets the interested integer value (either current or plug count)
             int value = Integer.parseInt(splitCmd[4]);
+            // Gets the parent of the component as parent
+            Component parent = Components.get(parentName);
 
-            if(componentType.equals(CIRCUIT))
+            switch(componentType.toLowerCase())
             {
-                // add component-type new-component parent-component #
-                components.Component parent = Components.get(parentName);
-                components.Component temp = new components.Circuit(name, parent, value);
-                Components.add(temp);
+                case APPLIANCE:
+                    // Adds a new Appliance with the requested values
+                    Components.add(new Appliance(name, parent, value));
+                    break;
+                case CIRCUIT:
+                    // Adds a new Circuit with the requested values
+                    Components.add(new Circuit(name, parent, value));
+                    break;
+                case OUTLET:
+                    // Adds a new Outlet with the requested values
+                    Components.add(new Outlet(name, parent, value));
+                    break;
+                default:
+                    // Alert the user that a bad line was found in the document
+                    System.out.print("Incorrect component type specified on a non-commented line. Skipping.");
+                    break;
             }
-            else if (componentType.equals(OUTLET))
-            {
-                components.Component parent = Components.get(parentName);
-                components.Component temp = new components.Outlet(name, parent, value);
-                Components.add(temp);
-            }
-            else if (componentType.equals(APPLIANCE))
-            {
-                components.Component parent = Components.get(parentName);
-                components.Component temp = new components.Appliance(name, parent, value);
-                Components.add(temp);
-            }
-            else
-            {
-                System.out.print("Incorrect component type specified on a non-commented line. Skipping.");
-            }
-
-            // Because it is the initial setup, we can assume we need to add all of them to the Components database
         }
     }
 }
