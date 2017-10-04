@@ -3,8 +3,6 @@ package components;
 public class Circuit extends Component
 {
 
-    protected int maxCurrent;
-
     /**
      * Creates a circuit object to add to the item.
      * @param name
@@ -13,19 +11,15 @@ public class Circuit extends Component
      */
     public Circuit(String name, Component parent, int maxCurrent)
     {
-        super(name, parent, Type.CIRCUIT, 0);
-        this.maxCurrent = maxCurrent;
+        super(name, parent, Type.CIRCUIT, maxCurrent);
+        this.currentBeingUsed = 0;
     }
 
+    @Override
     public void updateCurrent() {
-        if(children.size() > 0)
-        {
-            int currentTotal = 0;
-            for (Component child : children) {
-                child.updateCurrent();
-                currentTotal += child.currentUsed;
-            }
-            currentUsed = currentTotal;
+        super.updateCurrent();
+        if (currentBeingUsed > maxCurrent && turnedOn) {
+            overloadCircuit();
         }
     }
 
@@ -47,13 +41,15 @@ public class Circuit extends Component
 
     private void overloadCircuit()
     {
-        System.out.println(this + " is breaking!");
+        System.out.println(this + " is breaking.");
         turnOff();
+        currentBeingUsed = 0;
+        highestParent.updateCurrent();
     }
 
     @Override
     public String toString()
     {
-        return "Circuit(name=" + name + ", current=" + currentUsed +"/" + maxCurrent +", plugs=" + ", on=" + turnedOn +")";
+        return "Circuit(name=" + name + ", current=" + currentBeingUsed +"/" + maxCurrent + ", on=" + turnedOn +")";
     }
 }

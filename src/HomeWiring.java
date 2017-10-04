@@ -9,12 +9,10 @@ import java.io.File;
 public class HomeWiring {
 
     private HomeWiring diagram;
-    public static final String ADD = "add";
     public static final String APPLIANCE = "appliance";
     public static final String CIRCUIT = "circuit";
     public static final String COMMENT = "#";
     public static final String DISPLAY = "d";
-    public static final String MAIN = "main";
     public static final String OFF = "-";
     public static final String ON = "+";
     public static final String OUTLET = "outlet";
@@ -74,7 +72,7 @@ public class HomeWiring {
         {
             System.out.print(PROMPT);
             String next = in.nextLine();
-            if(next.toLowerCase().equals("q"))
+            if(next.toLowerCase().equals(QUIT))
             {
                 System.out.println("System will now quit.");
                 break;
@@ -82,7 +80,7 @@ public class HomeWiring {
             else
             {
                 String [] cmds = next.split(" ");
-                if(cmds[0].equals("d"))
+                if(cmds[0].equals(DISPLAY))
                 {
                     if(Components.has(cmds[1]))
                     {
@@ -94,21 +92,19 @@ public class HomeWiring {
                         System.out.println("Unknown component: " + cmds[1]);
                     }
                 }
-                else if(cmds[0].equals("+"))
+                else if(cmds[0].equals(ON))
                 {
                     if (Components.has(cmds[1]))
                     {
-                        Component toPlug = Components.get(cmds[1]);
-                        Component newParent = Components.get(cmds[2]);
-                        boolean plugged = newParent.add(toPlug);
-                        System.out.println(cmds[1] + " plugged in: " + plugged);
+                        Component startPowerCascade = Components.get(cmds[1]);
+                        startPowerCascade.turnOn();
                     }
                 }
-                else if(cmds[0].equals("-"))
+                else if(cmds[0].equals(OFF))
                 {
                     //power off
                 }
-                else if(cmds[0].equals("p"))
+                else if(cmds[0].equals(PLUG))
                 {
                     try
                     {
@@ -130,7 +126,7 @@ public class HomeWiring {
                         System.out.println("Usage: >p component-name parent-component-name");
                     }
                 }
-                else if(cmds[0].equals("u"))
+                else if(cmds[0].equals(UNPLUG))
                 {
                     //unplug component
                     //plug component
@@ -163,18 +159,10 @@ public class HomeWiring {
 
             if(componentType.equals(CIRCUIT))
             {
-                if(name != "null")
-                {
-                    // add component-type new-component parent-component #
-                    components.Component parent = Components.get(parentName);
-                    components.Component temp = new components.Circuit(name, parent, value);
-                    Components.add(temp);
-                }
-                else
-                {
-                    components.Component temp = new components.Circuit(name, null, value);
-                    Components.add(temp);
-                }
+                // add component-type new-component parent-component #
+                components.Component parent = Components.get(parentName);
+                components.Component temp = new components.Circuit(name, parent, value);
+                Components.add(temp);
             }
             else if (componentType.equals(OUTLET))
             {

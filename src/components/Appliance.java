@@ -9,16 +9,14 @@ public class Appliance extends Component
     }
 
     @Override
-    public void turnOn()
-    {
-        current = currentUsed;
+    public void turnOn(){
+        currentBeingUsed = maxCurrent;
         super.turnOn();
     }
 
     @Override
-    public void turnOff()
-    {
-        current = 0;
+    public void turnOff(){
+        currentBeingUsed = 0;
         super.turnOff();
     }
 
@@ -42,7 +40,7 @@ public class Appliance extends Component
     @Override
     public String toString()
     {
-        return "Appliance(name=" + name + ", current=" + current +"/"+ currentUsed +", on=" + turnedOn +")";
+        return "Appliance(name=" + name + ", current=" + currentBeingUsed +"/"+ maxCurrent +", on=" + turnedOn +")";
     }
 
 }

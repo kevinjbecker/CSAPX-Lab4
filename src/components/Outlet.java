@@ -28,21 +28,9 @@ public class Outlet extends Component
         return false;
     }
 
-    public void updateCurrent()
-    {
-        int currentTotal = 0;
-
-        for(Component child : children)
-        {
-            currentTotal += child.currentUsed;
-        }
-
-        this.currentUsed = currentTotal;
-    }
-
     @Override
     public String toString()
     {
-        return "Outlet(name=" + name + ", current=" + current +", plugs=" + children.size() + '/' +  outlets + ", on=" + turnedOn +")";
+        return "Outlet(name=" + name + ", current=" + currentBeingUsed +", plugs=" + children.size() + '/' +  outlets + ", on=" + turnedOn +")";
     }
 }

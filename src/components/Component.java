@@ -18,15 +18,16 @@ public abstract class Component
     protected List<Component> children = new ArrayList<Component>();
     protected Component highestParent;
     protected boolean turnedOn = false;
-    protected int current;
-    protected int currentUsed;
+    protected int currentBeingUsed;
+    protected int maxCurrent;
 
-    public Component(String name, Component parent, Component.Type type, int currentUsed)
+    public Component(String name, Component parent, Component.Type type, int maxCurrent)
     {
         this.name = name;
         this.parent = parent;
         this.type = type;
-        this.currentUsed = currentUsed;
+        this.maxCurrent = maxCurrent;
+        this.currentBeingUsed = 0;
         if(parent != null)
         {
             parent.children.add(this);
@@ -59,27 +60,28 @@ public abstract class Component
 
     public void turnOn()
     {
-        System.out.println(name + " is turning on.");
-        this.turnedOn = true;
-        for(Component child : children)
+        if(parent == null || parent.turnedOn)
         {
-            child.turnOn();
+            System.out.println(name + " is turning on.");
+            this.turnedOn = true;
+            for (Component child : children) {
+                child.turnOn();
+            }
+            highestParent.updateCurrent();
         }
-
-        highestParent.updateCurrent();
     }
 
-    public void turnOff()
-    {
+    public void turnOff() {
         // Avoids recursive depth limit, since function would be called in an infinite loop if an element
         // tripped the circuit breaker, since it causes all elements below it to turn off.
         if(turnedOn)
         {
             System.out.println(name + " is turning off.");
-            turnedOn = false;
+            this.turnedOn = false;
             for (Component child : children)
             {
                 child.turnOff();
+                child.currentBeingUsed = 0;
             }
             highestParent.updateCurrent();
         }
@@ -87,7 +89,17 @@ public abstract class Component
 
     public void updateCurrent()
     {
-
+        // Makes sure that the component has children, otherwise the current would always be 0 for appliances
+        if(children.size() > 0)
+        {
+            int currentCounter = 0;
+            for (Component child : children)
+            {
+                child.updateCurrent();
+                currentCounter += child.currentBeingUsed;
+            }
+            this.currentBeingUsed = currentCounter;
+        }
     }
 
     public String getName()
