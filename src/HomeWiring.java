@@ -1,3 +1,5 @@
+import components.Component;
+
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
@@ -43,7 +45,6 @@ public class HomeWiring {
                 }
             }
             createWiringDiagram(cmds);
-            run();
         }
         catch(java.io.FileNotFoundException e)
         {
@@ -73,10 +74,77 @@ public class HomeWiring {
         {
             System.out.print(PROMPT);
             String next = in.nextLine();
-            if(next.substring(0,1).equals("q"))
+            if(next.toLowerCase().equals("q"))
             {
                 System.out.println("System will now quit.");
-                continueRunning = false;
+                break;
+            }
+            else
+            {
+                String [] cmds = next.split(" ");
+                if(cmds[0].equals("d"))
+                {
+                    if(Components.has(cmds[1]))
+                    {
+                        components.Component toDisplay = Components.get(cmds[1]);
+                        toDisplay.display();
+                    }
+                    else
+                    {
+                        System.out.println("Unknown component: " + cmds[1]);
+                    }
+                }
+                else if(cmds[0].equals("+"))
+                {
+                    if (Components.has(cmds[1]))
+                    {
+                        Component toPlug = Components.get(cmds[1]);
+                        Component newParent = Components.get(cmds[2]);
+                        boolean plugged = newParent.add(toPlug);
+                        System.out.println(cmds[1] + " plugged in: " + plugged);
+                    }
+                }
+                else if(cmds[0].equals("-"))
+                {
+                    //power off
+                }
+                else if(cmds[0].equals("p"))
+                {
+                    try
+                    {
+                        //plug component
+                        if (Components.has(cmds[1]))
+                        {
+                            Component toPlug = Components.get(cmds[1]);
+                            Component newParent = Components.get(cmds[2]);
+                            boolean plugged = newParent.add(toPlug);
+                            System.out.println(cmds[1] + " plugged in: " + plugged);
+                        }
+                        else
+                        {
+                            System.out.println("Component does not exist. Cannot be plugged in.");
+                        }
+                    }
+                    catch (ArrayIndexOutOfBoundsException e)
+                    {
+                        System.out.println("Usage: >p component-name parent-component-name");
+                    }
+                }
+                else if(cmds[0].equals("u"))
+                {
+                    //unplug component
+                    //plug component
+                    if(Components.has(cmds[1]))
+                    {
+                        Component toUnPlug = Components.get(cmds[1]);
+                        boolean unplugged = toUnPlug.remove();
+                        System.out.println(cmds[1]+ " unplugged: " + unplugged);
+                    }
+                }
+                else
+                {
+                    System.out.println("Unknown command. Please try again.");
+                }
             }
             //implement all of the commands
         }

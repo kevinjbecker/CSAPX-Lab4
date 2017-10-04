@@ -5,7 +5,7 @@ public class Appliance extends Component
 
     public Appliance(String name, Component parent, int requiredCurrent)
     {
-        super(name, parent, Type.values()[2], requiredCurrent);
+        super(name, parent, Type.APPLIANCE, requiredCurrent);
     }
 
     @Override
@@ -37,6 +37,12 @@ public class Appliance extends Component
     public boolean add(Component component)
     {
         return false;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Appliance(name=" + name + ", current=" + current +"/"+ currentUsed +", on=" + turnedOn +")";
     }
 
 }

@@ -46,7 +46,7 @@ public abstract class Component
     {
         for (int i = 0; i < depth; i++)
         {
-            System.out.print("  ");
+            System.out.print("\t");
         }
 
         System.out.println(this);
@@ -99,4 +99,6 @@ public abstract class Component
     {
         return (parent == null) ? this : parent.findHighestParent();
     }
+
+
 }

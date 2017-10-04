@@ -13,7 +13,7 @@ public class Circuit extends Component
      */
     public Circuit(String name, Component parent, int maxCurrent)
     {
-        super(name, parent, Type.values()[1], 0);
+        super(name, parent, Type.CIRCUIT, 0);
         this.maxCurrent = maxCurrent;
     }
 
@@ -49,5 +49,11 @@ public class Circuit extends Component
     {
         System.out.println(this + " is breaking!");
         turnOff();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Circuit(name=" + name + ", current=" + currentUsed +"/" + maxCurrent +", plugs=" + ", on=" + turnedOn +")";
     }
 }
